@@ -23,6 +23,6 @@ Project source code:
 https://github.com/hfrommane/TF-siamesenet
 
 Chinese readme version is:
-
+https://www.jianshu.com/p/1df484d9eba9
 
 If you like, give me a star, thanks.
