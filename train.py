@@ -1,17 +1,11 @@
+import tensorflow as tf
+from model import SIAMESE
 from dataset import *
-from model import *
 import logging
 
 logging.basicConfig(level=logging.DEBUG,
                     format="%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s",
                     datefmt='%b %d %H:%M')
-
-flags = tf.app.flags
-FLAGS = flags.FLAGS
-
-flags.DEFINE_integer('train_iter', 500001, 'Total training iter')
-flags.DEFINE_integer('validation_step', 1000, 'Total training iter')
-flags.DEFINE_integer('step', 1000, 'Save after ... iteration')
 
 with tf.name_scope("in"):
     left = tf.placeholder(tf.float32, [None, 72, 72, 3], name='left')
@@ -25,25 +19,17 @@ print(left_output.shape)
 
 right_output = SIAMESE().siamesenet(right, reuse=True)
 
-# predictions, loss, accuracy = SIAMESE().contrastive_loss(left_output, right_output, label)
 model1, model2, distance, loss = SIAMESE().contrastive_loss(left_output, right_output, label)
 
 global_step = tf.Variable(0, trainable=False)
 
-# starter_learning_rate = 0.0001
-# learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 1000, 0.96, staircase=True)
-# tf.summary.scalar('lr', learning_rate)
-# train_step = tf.train.RMSPropOptimizer(learning_rate).minimize(loss, global_step=global_step)
-
-# train_step = tf.train.MomentumOptimizer(0.0001, 0.99, use_nesterov=True).minimize(loss, global_step=global_step)
-# train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(loss, global_step=global_step)
 train_step = tf.train.AdamOptimizer(0.0001).minimize(loss, global_step=global_step)
 
 # saver = tf.train.Saver()
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     saver = tf.train.Saver(tf.global_variables(), max_to_keep=20)
-    # saver.restore(sess, 'checkpoint_trained/model_130000.ckpt')
+    # saver.restore(sess, 'checkpoint_trained/model_3.ckpt')
 
     # setup tensorboard
     tf.summary.scalar('step', global_step)
@@ -65,7 +51,7 @@ with tf.Session() as sess:
         _, l, summary_str = sess.run([train_step, loss, merged],
                                      feed_dict={left: batch_left_arr, right: batch_right_arr, label: batch_similar_arr})
         writer.add_summary(summary_str, i)
-        print("\r#%d - Loss" % i, l)
+        logging.info("\r#%d - Loss" % i, l)
 
         if (i + 1) % FLAGS.validation_step == 0:
             val_distance = sess.run([distance],
