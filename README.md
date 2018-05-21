@@ -14,10 +14,10 @@ The key question is, how to define the loss function, the loss function is Logis
 The next step is training, training on TITAN X for about 3 days, we can see this Loss curve:
 ![Loss curve](https://upload-images.jianshu.io/upload_images/4019913-de14db779ade283d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-We can see that Loss converges very well, but after several trials, when Loss drops to around 0.1, it doesn't fall. I haven't found a reason yet. If you have ideas to solve this problem, you can give me a message or Email me (hfrommane@qq.com).
+We can see that Loss converges very well.
 
 What about the correct rate of our model?
-Haha, not very good, the correct rate on the LFW is 90%+, and the model needs to be optimized.
+Haha, not very good, the correct rate on the LFW is 94%+, and the model needs to be optimized. If you have ideas to solve this problem, you can give me a message or Email me (hfrommane@qq.com).
 
 Project source code:
 https://github.com/hfrommane/TF-siamesenet
