@@ -26,7 +26,7 @@ with graph.as_default():
         left = graph.get_operation_by_name("in/left").outputs[0]
         right = graph.get_operation_by_name("in/right").outputs[0]
 
-        distance = graph.get_operation_by_name("output/distance").outputs[0]
+        distance = tf.nn.sigmoid(graph.get_operation_by_name("output/distance").outputs[0])
 
         image_test = []
         label_test = []
